@@ -1,0 +1,133 @@
+﻿<Window x:Class="TestWPF.MainWindow"
+        
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="566.977" Width="676.743">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Paste" Executed="CommandBinding_Executed" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="V" Modifiers="Control" Command="Paste"/>
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Top" Grid.Row="0">
+            <Menu Width="Auto">
+                <MenuItem Header="_File">
+                    <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="Paste" HorizontalAlignment="Left" Width="140" Command="Paste"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="150" Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition MinWidth="100" Width="300*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="dataGrid" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding SelectedDimension.GetView}">
+                <DataGrid.CommandBindings>
+                    <CommandBinding Command="Paste" Executed="CommandBinding_Executed" />
+                </DataGrid.CommandBindings>
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="V" Modifiers="Control" Command="Paste"/>
+                </DataGrid.InputBindings>
+            </DataGrid>
+            <GridSplitter VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="2" Grid.Column="1" />
+
+            <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <ListView x:Name="listBox" Margin="5,5,5,5" 
+                          ItemsSource="{Binding Dimensions}" 
+                          SelectedItem="{Binding SelectedDimension}" 
+                          SelectionMode="Single">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" Width="100"/>
+                            <GridViewColumn Header="Base" Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Base}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel Grid.Row="1" Margin="5">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button Margin="5 0" Command="{Binding AddCommand}" >Add...</Button>
+                        <Button Margin="5 0" Grid.Column="1" Command="{Binding RemoveCommand}">Remove</Button>
+
+                        <Button Grid.Row="1" Margin="5 5" Grid.ColumnSpan="2" Command="{Binding GenerateCommand}">Generate...</Button>
+
+                        <Label Grid.Row="2" Padding="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">Lines for each base line:</Label>
+                        <TextBox Margin="5 0" Grid.Row="3" Text="{Binding TotalLinesFrom}"/>
+                        <TextBox Margin="5 0" Grid.Row="3" Grid.Column="1" Text="{Binding TotalLinesTo}"/>
+
+                        <Label Grid.Row="4" Padding="0" Content="From" HorizontalAlignment="Center"/>
+                        <Label Grid.Row="4" Padding="0" Grid.Column="1" Content="From" HorizontalAlignment="Center"/>
+
+                        <TextBox Margin="5 0" Grid.Row="5" Text="{Binding FromAmount}"/>
+                        <TextBox Margin="5 0" Grid.Row="5" Grid.Column="1" Text="{Binding ToAmount}"/>
+
+                        <CheckBox Margin="5" Grid.Row="6" Grid.ColumnSpan="2" IsChecked="{Binding UseSimpleRandom}" Content="Simple Random"/>
+                    </Grid>
+
+
+
+
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,192 @@
+﻿<Window x:Class="TestWPF.AddDimension"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestWPF"
+        mc:Ignorable="d"
+        Title="AddDimension" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        d:DataContext="{x:Static local:AddDimensionViewModel.Instance}"
+        >
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Dimension type select -->
+        <ComboBox Margin="5" 
+                  ItemsSource="{Binding DimensionType, Converter={StaticResource EnumToListConverter}, Mode=OneWay}"
+                  SelectedItem="{Binding DimensionType, Converter={StaticResource EnumToStringConverter}}"/>
+
+        <!-- Dim name -->
+        <TextBox Grid.Row="1" Margin="5 0 5 5" Text="{Binding DimensionName}"/>
+
+        <Grid Grid.Row="2" >
+
+            <!-- Dates fields -->
+            <StackPanel 
+                        Visibility="{Binding DimensionType, Converter={StaticResource EnumToVisibilityConverter}, 
+                        ConverterParameter=Date}"
+                        Height="Auto">
+
+                <Grid Margin="5 0 5 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="2" Text="Level"/>
+
+                    <ComboBox Margin="1" Grid.Row="2" Grid.Column="1"
+                              ItemsSource="{Binding DateLevel, Converter={StaticResource EnumToListConverter}, Mode=OneWay}" 
+                              SelectedItem="{Binding DateLevel, Converter={StaticResource EnumToStringConverter}}"/>
+
+                    <!-- date fields -->
+                    <GroupBox Grid.Row="3" Grid.ColumnSpan="2" Header="Fields">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox Content="DateKey" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=DateKey, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="DateKey"/>
+                                <CheckBox Grid.Row="1" Content="YearNum" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=YearNum, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="YearNum"/>
+                                <CheckBox Grid.Row="2" Content="QuarterNum" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=QuarterNum, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="QuarterNum"/>
+                                <CheckBox Grid.Row="3" Content="MonthNum" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=MonthNum, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="MonthNum"/>
+                                <!--<CheckBox Grid.Row="4" Content="" />-->
+
+                                <CheckBox Grid.Column="1" Content="MonthName" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=MonthName, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="MonthName"/>
+                                <CheckBox Grid.Column="1" Grid.Row="1" Content="WeekNum" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=WeekNum, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="WeekNum"/>
+                                <CheckBox Grid.Column="1" Grid.Row="2" Content="WeekDay" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=WeekDay, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="WeekDay"/>
+                                <CheckBox Grid.Column="1" Grid.Row="3" Content="DayNum" 
+                                          IsChecked="{Binding DateFields, Converter={StaticResource EnumFlagToBooleanConverter}, ConverterParameter=DayNum, Mode=OneWay}"
+                                          Command="{Binding DoDateFieldSelectCommand}" CommandParameter="DayNum"/>
+                                <!--<CheckBox Grid.Column="1" Grid.Row="4" Content=""/>-->
+
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <TextBlock Text="From" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Text="To" VerticalAlignment="Center"/>
+
+                    <DatePicker SelectedDate="{Binding DateFrom}" Grid.Row="0" Margin="1" Grid.Column="1"></DatePicker>
+                    <DatePicker SelectedDate="{Binding DateTo}" Grid.Row="1" Grid.Column="1" Margin="1"></DatePicker>
+                </Grid>
+            </StackPanel>
+
+            <!-- Names fields -->
+            <Grid 
+                       Visibility="{Binding DimensionType, Converter={StaticResource EnumToVisibilityConverter}, 
+                            ConverterParameter=Names}"
+                      >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- records count -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Count (max 500)" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding NamesCount}"></TextBox>
+                </Grid>
+
+                <!-- Fields -->
+                <GroupBox Header="Fields" Grid.Row="1">
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <CheckBox Content="Name" IsChecked="{Binding Name}"/>
+                        <CheckBox Content="Surname" IsChecked="{Binding SurName}"/>
+                        <CheckBox Content="Name + Surname" IsChecked="{Binding FullName}"/>
+                        <CheckBox Content="Gender" IsChecked="{Binding Gender}"/>
+                        <CheckBox Content="UID" IsChecked="{Binding UID}"/>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+
+            <!-- Id fields -->
+            <Grid 
+                      Visibility="{Binding DimensionType, Converter={StaticResource EnumToVisibilityConverter}, 
+                            ConverterParameter=Id}"
+                      >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- records count -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <TextBlock Padding="5 0" Grid.Row="1" Text="From Id" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding fromId}"></TextBox>
+
+                    <TextBlock Padding="5 0" Grid.Row="2" Text="To Id" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding toId}"></TextBox>
+                </Grid>
+               
+            </Grid>
+        </Grid>
+
+        <!-- Bottom buttons -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnAdd" Click="btnAdd_Click" Margin="5" Content="Add" Grid.Column="2" Width="Auto" IsDefault="True"></Button>
+            <Button x:Name="btnCancel" Click="btnCancel_Click" Margin="5" Content="Cancel" Grid.Column="0" Width="Auto" IsCancel="True"></Button>
+        </Grid>
+    </Grid>
+</Window>
